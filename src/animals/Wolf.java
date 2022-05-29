@@ -13,9 +13,8 @@ public class Wolf extends Predator implements Runnable {
         weight = 50;
         speed = 3;
         maximumFood = 8;
-        satiety = maximumFood;
-//        satiety = 5; // для тестов
-        hungerPerDay = satiety * 0.1;
+        satiety = maximumFood / 3;
+        hungerPerDay = maximumFood * 0.1;
         maxPopulation = 30;
     }
 
@@ -25,28 +24,30 @@ public class Wolf extends Predator implements Runnable {
 
     @Override
     public void eat(Island.Square squares) {
-        int chanceToKillFood = ThreadLocalRandom.current().nextInt(0, 10);
-//        int chanceToKillFood = 5;
         for (int i = 0; i < squares.list.size(); i++) {
+            int chanceToKillFood = ThreadLocalRandom.current().nextInt(0, 10);
+            Object target = squares.list.get(i);
             if (getSatiety() >= getMaximumFood()) {
-                setSatiety(getSatiety() - getHungerPerDay());
                 break;
             }
-            Object target = squares.list.get(i);
-            if (target instanceof Goat && chanceToKillFood < 8 && getHungerPerDay() <= ((Goat) target).getWeight()) {
-                setSatiety(getSatiety() + getHungerPerDay());
-                ((Goat) target).setWeight(((Goat) target).getWeight() - getHungerPerDay());
-                i--;
-                ((Goat) target).deadBody = true;
-
-                // нужно повесить тикер труп
-
-            } else if (target instanceof Goat && chanceToKillFood < 8 && getHungerPerDay() >= ((Goat) target).getWeight()) {
-                setSatiety(getSatiety() + ((Goat) target).getWeight());
-                ((Goat) target).setWeight(0);
-                // нужно повесить тикер труп
+            if ((target instanceof Goat && chanceToKillFood < 8) || (target instanceof Goat && ((Goat) target).deadBody)) {
+                if (getMaximumFood() - getSatiety() >= ((Goat) target).getWeight()) {
+                    setSatiety(getSatiety() + ((Goat) target).getWeight());
+                    ((Goat) target).setWeight(0);
+                    ((Goat) target).deadBody = true;
+                } else if (getMaximumFood() - getSatiety() < ((Goat) target).getWeight()) {
+                    ((Goat) target).setWeight(((Goat) target).getWeight() - (getMaximumFood() - getSatiety()));
+                    setSatiety(getMaximumFood());
+                    ((Goat) target).deadBody = true;
+                }
             }
-
+        }
+        if (getSatiety() > 0) {
+            setSatiety(getSatiety() - getHungerPerDay());
+        }
+        if (getSatiety() <= 0) {
+            setSurviveWithoutFoodLeft(getSurviveWithoutFoodLeft() - 1);
+            setSatiety(0);
         }
 
     }

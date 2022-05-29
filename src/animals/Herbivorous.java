@@ -10,27 +10,24 @@ public abstract class Herbivorous extends Animal {
 
         for (int l = 0; l < copySquaresList.size(); l++) { // ищем траву
             Object target = copySquaresList.get(l);
-
             if (target instanceof Plant && getSatiety() >= getMaximumFood()) {
-                setSatiety(getSatiety() - getHungerPerDay());
                 break;
             } else if (target instanceof Plant && getSatiety() < getMaximumFood() && ((Plant) target).getWeight() > 0) {
-                if (getHungerPerDay() > ((Plant) target).getWeight()) {
+                if (getMaximumFood() - getSatiety() >= ((Plant) target).getWeight()) {
                     setSatiety(getSatiety() + ((Plant) target).getWeight());
                     ((Plant) target).setWeight(0);
-                } else if (getHungerPerDay() < ((Plant) target).getWeight()) {
-                    setSatiety(getSatiety() + getHungerPerDay());
-                    ((Plant) target).setWeight(((Plant) target).getWeight() - getHungerPerDay());
+                } else if (getMaximumFood() - getSatiety() < ((Plant) target).getWeight()) {
+                    ((Plant) target).setWeight(((Plant) target).getWeight() - (getMaximumFood() - getSatiety()));
+                    setSatiety(getSatiety() + getMaximumFood() - getSatiety());
                 }
             }
-            else if (getSatiety() <= 0) {
-                setSurviveWithoutFoodLeft(getSurviveWithoutFoodLeft() - 1);
-                break;
-            }
-            else {
-                setSatiety(getSatiety() - getHungerPerDay());
-            }
-
+        }
+        if (getSatiety() > 0) {
+            setSatiety(getSatiety() - getHungerPerDay());
+        }
+        if (getSatiety() <= 0) {
+            setSurviveWithoutFoodLeft(getSurviveWithoutFoodLeft() - 1);
+            setSatiety(0);
         }
     }
 }
