@@ -2,19 +2,19 @@ package animals;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Wolf extends Predator implements Runnable {
+public class Bear extends Predator implements Runnable{
 
-    public Wolf() {
+    public Bear() {
         gaveBirth = false;
         moved = true;
         deadBody = false;
-        surviveWithoutFoodLeft = surviveWithoutFood = 10;
-        weight = 50;
-        speed = 3;
-        maximumFood = 8;
+        surviveWithoutFoodLeft = surviveWithoutFood = 15;
+        weight = 500;
+        speed = 2;
+        maximumFood = 80;
         satiety = maximumFood / 3;
         hungerPerDay = maximumFood * 0.1;
-        maxPopulation = 30;
+        maxPopulation = 5;
     }
 
     public int getSurviveWithoutFood() {
@@ -24,22 +24,33 @@ public class Wolf extends Predator implements Runnable {
     @Override
     public void eat(Island.Square squares) {
 
-
-        int chanceToKillHorse = 1;
-        int chanceToKillDeer = 2;
-        int chanceToKillRabbit = 6;
-        int chanceToKillMouse = 8;
-        int chanceToKillGoat = 6;
+        int chanceToKillAnaconda = 8;
+        int chanceToKillHorse = 4;
+        int chanceToKillDeer = 8;
+        int chanceToKillRabbit = 8;
+        int chanceToKillMouse = 9;
+        int chanceToKillGoat = 7;
         int chanceToKillSheep = 7;
-        int chanceToKillBoar = 2;
-        int chanceToKillBuffalo = 1;
-        int chanceToKillDuck = 4;
+        int chanceToKillBoar = 5;
+        int chanceToKillBuffalo = 2;
+        int chanceToKillDuck = 1;
 
         for (int i = 0; i < squares.list.size(); i++) {
             int chanceToKillFood = ThreadLocalRandom.current().nextInt(0, 10);
             Object target = squares.list.get(i);
             if (getSatiety() >= getMaximumFood()) {
                 break;
+            }
+            if ((target instanceof Anaconda && chanceToKillFood < chanceToKillAnaconda) || (target instanceof Anaconda && ((Anaconda) target).deadBody)) {
+                if (getMaximumFood() - getSatiety() >= ((Anaconda) target).getWeight()) {
+                    setSatiety(getSatiety() + ((Anaconda) target).getWeight());
+                    ((Anaconda) target).setWeight(0);
+                    ((Anaconda) target).deadBody = true;
+                } else if (getMaximumFood() - getSatiety() < ((Anaconda) target).getWeight()) {
+                    ((Anaconda) target).setWeight(((Anaconda) target).getWeight() - (getMaximumFood() - getSatiety()));
+                    setSatiety(getMaximumFood());
+                    ((Anaconda) target).deadBody = true;
+                }
             }
             if ((target instanceof Horse && chanceToKillFood < chanceToKillHorse) || (target instanceof Horse && ((Horse) target).deadBody)) {
                 if (getMaximumFood() - getSatiety() >= ((Horse) target).getWeight()) {
@@ -150,7 +161,9 @@ public class Wolf extends Predator implements Runnable {
         }
 
     }
+
     @Override
     public void run() {
+
     }
 }

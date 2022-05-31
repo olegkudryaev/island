@@ -24,12 +24,37 @@ public abstract class Animal {
 
         Class animalHusband = getClass();
 
+        int countWife = 0;
         ArrayList<Object> copySquaresList = squares.list;
 
-        for (int i = 0; i < copySquaresList.size(); i++) {
+//        for (int i = 0; i < copySquaresList.size(); i++) { // подсчет животных перед размножением
+//            Object animalWife = squares.list.get(i).getClass();
+//            if (animalHusband == animalWife) {
+//                countWife++;
+//            }
+//        }
+//        if (countWife >= maxPopulation){
+//            return;
+//        }
+
+        for (int i = 0; i < squares.list.size(); i++) {
+
+//            for (int j = 0; j < copySquaresList.size(); j++) { // подсчет животных перед размножением
+//                Object animalWife = squares.list.get(i).getClass();
+//                Object animalWifeObject = squares.list.get(i);
+//                if (animalHusband == animalWife && ((Animal) animalWifeObject).gaveBirth && gaveBirth && animalWifeObject != this) {
+//                    countWife++;
+//                }
+//            }
+
             Object animalWife = squares.list.get(i).getClass();
             Object animalWifeObject = squares.list.get(i);
-            if (animalHusband == animalWife && ((Animal) animalWifeObject).gaveBirth && gaveBirth && animalWifeObject != this) {
+            if (animalHusband == animalWife && ((Animal) animalWifeObject).gaveBirth && gaveBirth && animalWifeObject != this) { // отказ от размножения
+
+//                if (countWife >= ((Animal) animalWifeObject).getMaxPopulation()) {
+//                    break;
+//                }
+
                 ((Animal) animalWifeObject).setGaveBirth(false);
                 setGaveBirth(false);
                 try {
@@ -42,15 +67,30 @@ public abstract class Animal {
                 break;
             }
         }
-        System.out.println();
     }
 
     public void chooseDirectionOfTravel(Island.Square[][] squares, int i, int j) {
         if (!isMoved()) {
             return;
         }
-        int chanceToMoveUpOrDown = ThreadLocalRandom.current().nextInt(-speed, speed+1);
-        int chanceToMoveLeftOrRight = ThreadLocalRandom.current().nextInt(-speed, speed+1);
+
+        int chanceToMoveUpOrDown = ThreadLocalRandom.current().nextInt(-speed, speed + 1);
+        int chanceToMoveLeftOrRight = ThreadLocalRandom.current().nextInt(-speed, speed + 1);
+
+//
+//        if (i + chanceToMoveUpOrDown < squares.length &&
+//                j + chanceToMoveLeftOrRight < squares[i].length &&
+//                i + chanceToMoveUpOrDown >= 0 &&
+//                j + chanceToMoveLeftOrRight >= 0) {
+//            int countAnimal = 0;
+//            Object animal = this.getClass();
+//            for (int z = 0; j < squares[i + chanceToMoveUpOrDown][j + chanceToMoveLeftOrRight].list.size(); z++) { // подсчет животных перед размножением
+//
+//            }
+//        }
+//
+
+
         if (i + chanceToMoveUpOrDown < squares.length &&
                 j + chanceToMoveLeftOrRight < squares[i].length &&
                 i + chanceToMoveUpOrDown >= 0 &&

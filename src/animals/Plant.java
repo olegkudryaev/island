@@ -3,7 +3,7 @@ package animals;
 import java.util.ArrayList;
 
 public class Plant implements Runnable{
-    public static final int maxPopulation = 10000;
+    public static final int maxPopulation = 200;
 
     public static int getMaxPopulation() {
         return maxPopulation;

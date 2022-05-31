@@ -1,13 +1,13 @@
 package animals;
 
-public class Goat extends Herbivorous implements Runnable {
+public class Sheep extends Herbivorous implements Runnable{
 
-    public Goat() {
+    public Sheep(){
         gaveBirth = false;
         moved = true;
         deadBody = false;
         surviveWithoutFoodLeft = surviveWithoutFood = 5;
-        weight = 60;
+        weight = 70;
         speed = 3;
         maximumFood = 15;
         satiety = maximumFood / 3;
@@ -15,12 +15,12 @@ public class Goat extends Herbivorous implements Runnable {
         maxPopulation = 140;
     }
 
-    @Override
-    public void run() {
-    }
-
     public int getSurviveWithoutFood() {
         return surviveWithoutFood;
     }
 
+    @Override
+    public void run() {
+
+    }
 }
